@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanilla JavaScript Virtual Keyboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #0f172a;
+            color: white;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .input-container {
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            background-color: #1e293b;
+            border: 1px solid #06b6d4;
+            color: white;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .button-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #06b6d4;
+            color: #0f172a;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0891b2;
+        }
+        .virtual-keyboard {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid #06b6d4;
+            padding: 15px;
+            z-index: 1000;
+            display: none;
+        }
+        .virtual-keyboard.visible {
+            display: block;
+        }
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+            gap: 5px;
+        }
+        .key {
+            padding: 12px 15px;
+            background-color: #1e293b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            min-width: 30px;
+            text-align: center;
+        }
+        .key:hover {
+            background-color: #334155;
+        }
+        .key:active {
+            background-color: #475569;
+        }
+        .space-key {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vanilla JavaScript Virtual Keyboard</h1>
+        <div class="input-container">
+            <input type="text" id="test-input" placeholder="Click here to test the keyboard">
+        </div>
+        <div class="button-container">
+            <button id="toggle-keyboard">Show Keyboard</button>
+        </div>
+    </div>
+
+    <div class="virtual-keyboard" id="virtual-keyboard">
+        <div class="keyboard-row">
+            <button class="key" data-key="1">1</button>
+            <button class="key" data-key="2">2</button>
+            <button class="key" data-key="3">3</button>
+            <button class="key" data-key="4">4</button>
+            <button class="key" data-key="5">5</button>
+            <button class="key" data-key="6">6</button>
+            <button class="key" data-key="7">7</button>
+            <button class="key" data-key="8">8</button>
+            <button class="key" data-key="9">9</button>
+            <button class="key" data-key="0">0</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key" data-key="q">q</button>
+            <button class="key" data-key="w">w</button>
+            <button class="key" data-key="e">e</button>
+            <button class="key" data-key="r">r</button>
+            <button class="key" data-key="t">t</button>
+            <button class="key" data-key="y">y</button>
+            <button class="key" data-key="u">u</button>
+            <button class="key" data-key="i">i</button>
+            <button class="key" data-key="o">o</button>
+            <button class="key" data-key="p">p</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key" data-key="a">a</button>
+            <button class="key" data-key="s">s</button>
+            <button class="key" data-key="d">d</button>
+            <button class="key" data-key="f">f</button>
+            <button class="key" data-key="g">g</button>
+            <button class="key" data-key="h">h</button>
+            <button class="key" data-key="j">j</button>
+            <button class="key" data-key="k">k</button>
+            <button class="key" data-key="l">l</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key" data-key="z">z</button>
+            <button class="key" data-key="x">x</button>
+            <button class="key" data-key="c">c</button>
+            <button class="key" data-key="v">v</button>
+            <button class="key" data-key="b">b</button>
+            <button class="key" data-key="n">n</button>
+            <button class="key" data-key="m">m</button>
+            <button class="key" data-key=",">,</button>
+            <button class="key" data-key=".">.</button>
+            <button class="key" data-key="?">?</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key" id="backspace">Backspace</button>
+            <button class="key space-key" data-key=" ">Space</button>
+            <button class="key" id="enter">Enter</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const keyboard = document.getElementById('virtual-keyboard');
+            const toggleButton = document.getElementById('toggle-keyboard');
+            const input = document.getElementById('test-input');
+            let isUpperCase = false;
+
+            // 切换键盘显示/隐藏
+            toggleButton.addEventListener('click', function() {
+                keyboard.classList.toggle('visible');
+                toggleButton.textContent = keyboard.classList.contains('visible') ? 'Hide Keyboard' : 'Show Keyboard';
+            });
+
+            // 点击输入框时显示键盘
+            input.addEventListener('focus', function() {
+                keyboard.classList.add('visible');
+                toggleButton.textContent = 'Hide Keyboard';
+            });
+
+            // 点击键盘按键
+            document.querySelectorAll('.key').forEach(key => {
+                key.addEventListener('click', function() {
+                    const keyValue = this.getAttribute('data-key');
+                    if (keyValue) {
+                        // 添加按键动画效果
+                        this.classList.add('active');
+                        setTimeout(() => this.classList.remove('active'), 200);
+
+                        // 处理输入
+                        const currentValue = input.value;
+                        const cursorPosition = input.selectionStart;
+
+                        if (keyValue === ' ') {
+                            input.value = currentValue.slice(0, cursorPosition) + ' ' + currentValue.slice(cursorPosition);
+                        } else {
+                            input.value = currentValue.slice(0, cursorPosition) + keyValue + currentValue.slice(cursorPosition);
+                        }
+
+                        // 更新光标位置
+                        input.selectionStart = input.selectionEnd = cursorPosition + 1;
+                        input.focus();
+                    }
+                });
+            });
+
+            // 处理退格键
+            document.getElementById('backspace').addEventListener('click', function() {
+                const currentValue = input.value;
+                const cursorPosition = input.selectionStart;
+
+                if (cursorPosition > 0) {
+                    input.value = currentValue.slice(0, cursorPosition - 1) + currentValue.slice(cursorPosition);
+                    input.selectionStart = input.selectionEnd = cursorPosition - 1;
+                    input.focus();
+                }
+            });
+
+            // 处理回车键
+            document.getElementById('enter').addEventListener('click', function() {
+                const currentValue = input.value;
+                const cursorPosition = input.selectionStart;
+
+                input.value = currentValue.slice(0, cursorPosition) + '\n' + currentValue.slice(cursorPosition);
+                input.selectionStart = input.selectionEnd = cursorPosition + 1;
+                input.focus();
+            });
+
+            console.log('虚拟键盘测试页面已加载');
+        });
+    </script>
+</body>
+</html>

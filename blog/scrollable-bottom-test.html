@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollable Bottom Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 200vh; /* 使页面可以滚动 */
+            background-color: #0f172a;
+            color: white;
+            padding-bottom: 200px; /* 为底部元素留出空间 */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .bottom-element {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background-color: rgba(239, 68, 68, 0.9);
+            border-top: 3px solid white;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .instructions {
+            margin-top: 1rem;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(30, 41, 59, 0.8);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator">
+        <p>滚动页面查看底部红色元素</p>
+        <p>当前滚动位置: <span id="scroll-position">0</span>px</p>
+    </div>
+
+    <div class="container">
+        <h1>Scrollable Bottom Element Test</h1>
+        <p>这个页面有足够的高度，可以滚动。底部有一个红色元素，应该始终可见。</p>
+        <p>尝试滚动页面，看看是否能看到底部的红色元素。</p>
+
+        <!-- 添加大量内容使页面可以滚动 -->
+        <div style="height: 1500px;">
+            <p>滚动向下...</p>
+        </div>
+    </div>
+
+    <div class="bottom-element">
+        <p>底部元素 - 应该始终可见</p>
+        <div class="instructions">
+            <p>如果看不到这个元素，请检查浏览器设置</p>
+            <p>或尝试调整屏幕分辨率</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bottomElement = document.querySelector('.bottom-element');
+            const scrollPosition = document.getElementById('scroll-position');
+
+            console.log('底部元素:', bottomElement);
+            console.log('底部元素样式:', window.getComputedStyle(bottomElement));
+            console.log('底部元素位置:', bottomElement.getBoundingClientRect());
+
+            // 更新滚动位置指示器
+            window.addEventListener('scroll', () => {
+                scrollPosition.textContent = window.scrollY;
+            });
+
+            // 定期检查并报告元素状态
+            setInterval(() => {
+                const rect = bottomElement.getBoundingClientRect();
+                console.log('底部元素位置更新:', rect);
+                console.log('底部元素可见性:', window.getComputedStyle(bottomElement).display);
+                console.log('底部元素z-index:', window.getComputedStyle(bottomElement).zIndex);
+
+                // 强制设置样式
+                bottomElement.style.display = 'flex';
+                bottomElement.style.bottom = '0';
+                bottomElement.style.zIndex = '9999';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

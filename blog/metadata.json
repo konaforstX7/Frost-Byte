@@ -1,0 +1,5 @@
+{
+  "name": "CryoFlux Blog",
+  "description": "A personal blog platform with a dynamic, frosted energy field aesthetic. This is a frontend demonstration using local storage to persist posts. The user can create, view, and manage blog entries in a visually rich, animated interface.",
+  "requestFramePermissions": []
+}

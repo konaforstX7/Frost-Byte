@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Keyboard Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1e293b;
+            color: white;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #334155;
+            border: 1px solid #64748b;
+            color: white;
+            border-radius: 4px;
+        }
+        .virtual-keyboard {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #0f172a;
+            padding: 10px;
+            border-top: 1px solid #334155;
+        }
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        .key {
+            padding: 10px 15px;
+            margin: 0 3px;
+            background-color: #334155;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+        .key:hover {
+            background-color: #475569;
+        }
+        .key:active {
+            background-color: #64748b;
+        }
+        .space-key {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Virtual Keyboard Test</h1>
+        <input type="text" id="test-input" placeholder="Click here and type...">
+    </div>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function VirtualKeyboard() {
+            const [activeInput, setActiveInput] = useState(null);
+            const [pressedKey, setPressedKey] = useState(null);
+
+            // 监听输入框焦点
+            useEffect(() => {
+                const input = document.getElementById('test-input');
+                const handleFocus = () => setActiveInput('test-input');
+                const handleBlur = () => setActiveInput(null);
+
+                input.addEventListener('focus', handleFocus);
+                input.addEventListener('blur', handleBlur);
+
+                return () => {
+                    input.removeEventListener('focus', handleFocus);
+                    input.removeEventListener('blur', handleBlur);
+                };
+            }, []);
+
+            // 处理按键点击
+            const handleKeyClick = (key) => {
+                setPressedKey(key);
+                setTimeout(() => setPressedKey(null), 200);
+
+                if (activeInput) {
+                    const input = document.getElementById(activeInput);
+                    if (input) {
+                        let currentValue = input.value;
+
+                        if (key === 'Space') {
+                            currentValue += ' ';
+                        } else if (key === 'Backspace') {
+                            currentValue = currentValue.slice(0, -1);
+                        } else if (key === 'Enter') {
+                            currentValue += '\n';
+                        } else {
+                            currentValue += key;
+                        }
+
+                        input.value = currentValue;
+                        input.dispatchEvent(new Event('input'));
+                    }
+                }
+            };
+
+            // 键盘布局
+            const keyboardLayout = [
+                ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+                ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+                ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+                ['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?'],
+                ['Backspace', 'Space', 'Enter']
+            ];
+
+            return (
+                <div className="virtual-keyboard">
+                    {keyboardLayout.map((row, rowIndex) => (
+                        <div key={rowIndex} className="keyboard-row">
+                            {row.map((key) => (
+                                <button
+                                    key={key}
+                                    onClick={() => handleKeyClick(key)}
+                                    className={`key ${pressedKey === key ? 'active' : ''} ${key === 'Space' ? 'space-key' : ''}`}
+                                >
+                                    {key}
+                                </button>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<VirtualKeyboard />, document.getElementById('root'));
+    </script>
+</body>
+</html>

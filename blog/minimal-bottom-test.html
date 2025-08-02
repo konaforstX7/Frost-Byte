@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Bottom Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #0f172a;
+            color: white;
+        }
+
+        .bottom-element {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background-color: red;
+            border-top: 3px solid white;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Minimal Bottom Element Test</h1>
+    <p>Can you see the red bar at the bottom of the screen?</p>
+
+    <div class="bottom-element">
+        Bottom Element
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bottomElement = document.querySelector('.bottom-element');
+            console.log('底部元素:', bottomElement);
+            console.log('底部元素样式:', window.getComputedStyle(bottomElement));
+            console.log('底部元素位置:', bottomElement.getBoundingClientRect());
+
+            // 定期检查并报告元素状态
+            setInterval(() => {
+                const rect = bottomElement.getBoundingClientRect();
+                console.log('底部元素位置更新:', rect);
+                console.log('底部元素可见性:', window.getComputedStyle(bottomElement).display);
+                console.log('底部元素z-index:', window.getComputedStyle(bottomElement).zIndex);
+
+                // 强制设置样式
+                bottomElement.style.display = 'flex';
+                bottomElement.style.bottom = '0';
+                bottomElement.style.zIndex = '9999';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
