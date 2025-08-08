@@ -1,4 +1,4 @@
-# 🌌 Frost Byte - 极光博客系统
+# 🌌 Frost Byte
 
 ![Blog Preview](https://img.shields.io/badge/Status-Active-brightgreen) ![React](https://img.shields.io/badge/React-19.1.1-blue) ![Django](https://img.shields.io/badge/Django-5.2.4-green) ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.2-blue)
 
@@ -22,11 +22,11 @@
 ## 🖼️ 界面展示
 
 ### 登录界面
-![登录界面](./imgs/SignIn.png)
+![登录界面](blog/imgs/SignIn.png)
 *欢迎来到赛博朋克风格的登录界面！在这里，你将踏入一个充满未来感的数字世界。极光般的背景色彩流转，仿佛置身于星际空间站的控制台前。输入你的凭证，开启这场奇妙的博客之旅吧！✨*
 
 ### 主页界面
-![主页界面](./imgs/HomePage.png)
+![主页界面](blog/imgs/HomePage.png)
 *这就是你的专属数字领域！当还没有任何文章时，系统会用一句富有哲理的话语迎接你："我们所见证的世界并非客观真理，而是源自我们内在状态的投影。" 点击右上角的"Add Post"按钮，开始创造属于你的数字传奇！背景中飘洒的粒子效果让整个界面充满了生命力。🌌*
 
 ### 🛠️ 技术栈
